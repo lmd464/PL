@@ -1,0 +1,10 @@
+(** @canonical Dune__exe.Hw *)
+module Hw = Dune__exe__Hw
+
+
+(** @canonical Dune__exe.Io *)
+module Io = Dune__exe__Io
+
+
+(** @canonical Dune__exe.TailOpt *)
+module TailOpt = Dune__exe__TailOpt
