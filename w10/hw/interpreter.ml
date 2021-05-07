@@ -29,11 +29,11 @@ let rec interp_e (s : Store.t) (e : Ast.expr) : Store.value =
   | Ast.App (func, func_arg) -> let func_closure = interp_e s func in
                                 begin
                                   match func_closure with
-                                  | Store.ClosureV (func_arg_name, func_body, store) -> let interpreted_arg = interp_e s func_arg in   (* 기존의 Store에서 인자를 계산 *)
-                                                                                        (* pair = (func_arg_name, interpreted_arg) *)
-                                                                                        (* 함수 시점의 store에, 계산한 인자를 저장 *)
-                                                                                        let new_store = Store.insert func_arg_name interpreted_arg store in  
-                                                                                        interp_e new_store func_body
+                                  | Store.ClosureV (func_arg_name, func_body, func_store) -> let interpreted_arg = interp_e s func_arg in   (* 기존의 Store에서 인자를 계산 *)
+                                                                                             (* pair = (func_arg_name, interpreted_arg) *)
+                                                                                             (* 함수 시점의 store에, 계산한 인자를 저장 *)
+                                                                                             let new_store = Store.insert func_arg_name interpreted_arg func_store in  
+                                                                                             interp_e new_store func_body
                                   | _ -> failwith (F.asprintf "Not a function : %a" Ast.pp_e func)
                                 end
   
