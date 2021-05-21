@@ -36,13 +36,13 @@ let rec interp_e (s : Store.t) (e : Ast.expr) : Store.value =
                                 match interp_e s e1 with
                                 | Store.ClosureV (x', e, s') -> let rec s'' = (x, (Store.ClosureV (x', e, s''))) :: s' in
                                                                 interp_e s'' e2
-                                | _ -> failwith "..."
+                                | _ -> failwith (F.asprintf "Not a function : %a" Ast.pp_e e1)
                               end
 
 
   | Ast.Fun (func_arg_name, func_body) -> Store.ClosureV (func_arg_name, func_body, s)
 
-  (* 함수의 Store에 인자를 넣을 때, interp해서 넣지 않고 - 해당 시점의 Store와 함께 그대로 FreezedV형태로 넣는다. *)
+  (* 함수의 Store에 인자를 넣을 때, interp해서 넣지 않고 - 해당 시점의 Store와 함께 그대로 FreezedV 형태로 넣는다. *)
   (* 이는 나중에 Id에서 다시 분리되어, interp 되어 계산된다. *)
   | Ast.App (func, func_arg) -> let func_closure = interp_e s func in
                                 begin
