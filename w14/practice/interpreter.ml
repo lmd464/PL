@@ -109,13 +109,10 @@ let rec interp_s (stmt : Ast.stmt) ((env, mem) : Env.t * Mem.t) : Env.t * Mem.t 
                                 else failwith "TODO WARNING : var already exists"
   
   (* 주소와 값 연결 *)
-  | Ast.StoreStmt (e1, e2) -> let e1_interp = interp_e e1 (env, mem) in
-                              let e2_interp = interp_e e2 (env, mem) in
+  | Ast.StoreStmt (e1, e2) -> let addr_interp = interp_e e1 (env, mem) in
+                              let val_interp = interp_e e2 (env, mem) in
                               begin
-                                match (e1_interp, e2_interp) with
-                            (*  | (Mem.AddressV addr, Mem.NumV nv) -> (env, (Mem.insert addr nv mem))
-                                | (Mem.AddressV addr, Mem.BoolV bv) -> (env, (Mem.insert addr bv mem))
-                                | (Mem.AddressV addr, Mem.AddressV av) -> (env, (Mem.insert addr av mem))  *)
+                                match (addr_interp, val_interp) with
                                 | (Mem.AddressV addr, v) -> (env, (Mem.insert addr v mem))
                                 | _ -> failwith "TODO WARNING : not an addr"
                               end
@@ -160,6 +157,7 @@ let rec interp_s (stmt : Ast.stmt) ((env, mem) : Env.t * Mem.t) : Env.t * Mem.t 
                                                                         interp_s (Ast.WhileStmt (cond, stmt_list)) (env_t, mem_t)
                                                                      else
                                                                         (env, mem)
+
                                           | _ -> failwith (F.asprintf "Not a bool value : %a" Ast.pp_e cond)
                                         end
 
